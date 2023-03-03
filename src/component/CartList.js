@@ -3,7 +3,7 @@ class CartList {
     this.$target = $target;
     this.$container = document.createElement('ul');
     this.$container.className = 'divide-y divide-gray-200';
-    this.$totalCouont = document.getElementById('total-count');
+    this.$totalCount = document.getElementById('total-count');
     this.state = initialData;
     this.$target.append(this.$container);
     this.render();
@@ -18,12 +18,16 @@ class CartList {
     this.setState(newState);
     console.log(newState);
   }
-
+  removeCartItem(id) {
+    // 자기가 삭제해야하는 아이템
+    const newState = this.state.filter((item) => item.id !== id);
+    this.setState(newState);
+  }
   render() {
-    this.$totalCouont.innerHTML =
+    this.$totalCount.innerHTML =
       this.state
         .reduce((acc, crr) => crr.price * crr.count + acc, 0)
-        .toLocaleString() + '원'; // 현재 장바구니 가격합 ;
+        .toLocaleString() + '원'; // 장바구니 총 가격 합산 기능 ;
     this.$container.innerHTML = this.state
       .map((item) => {
         return `

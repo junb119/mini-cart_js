@@ -75,11 +75,20 @@ const addCartItem = (e) => {
   toggleCart();
 };
 
+const removeCartItem = (e) => {
+  if (e.target.className === 'remove-btn') {
+    // 현재 클릭된 삭제한다
+    console.log(e.target);
+    const currentProductId = parseInt(e.target.closest('li').id);
+    cartList.removeCartItem(currentProductId);
+  }
+};
+
 $openCartBtn.addEventListener('click', toggleCart);
 $closeCartBtn.addEventListener('click', toggleCart);
 $backdrop.addEventListener('click', toggleCart);
 $productListGrid.addEventListener('click', addCartItem);
-
+$cartList.addEventListener('click', removeCartItem);
 // 6. 장바구니 총 가격 합산 기능
 // 장바구니 하단에 현재 장바구니에 담겨있는 상품 가격들의 총 합을 표시해주어야 합니다.
 
