@@ -26,7 +26,7 @@ const $closeCartBtn = document.getElementById('close-cart-btn');
 const $shoppingCart = document.getElementById('shopping-cart');
 const $backdrop = document.getElementById('backdrop');
 const $cartList = document.getElementById('cart-list');
-
+// const $paymentBtn = document.getElementById('payment-btn');
 let productData = {};
 
 const productList = new ProductList($productListGrid, []);
@@ -43,7 +43,6 @@ const fetchProductData = async () => {
   productList.setState(result);
   productData = result;
 };
-fetchProductData();
 
 // 3. 장바구니 토글 기능
 // 상단 우측의 장바구니 아이콘을 누르면 장바구니가 열려야 합니다.
@@ -75,20 +74,39 @@ const addCartItem = (e) => {
   toggleCart();
 };
 
-const removeCartItem = (e) => {
-  if (e.target.className === 'remove-btn') {
-    // 현재 클릭된 삭제한다
-    console.log(e.target);
-    const currentProductId = parseInt(e.target.closest('li').id);
-    cartList.removeCartItem(currentProductId);
+const modifyCartItem = (e) => {
+  const currentProductId = parseInt(e.target.closest('li').id);
+  switch (e.target.className) {
+    case 'increase-btn':
+      // 상품 수량 + 1
+      cartList.increaseCartItem(currentProductId);
+      break;
+    case 'decrease-btn':
+      // 상품 수량 - 1
+      cartList.decreaseCartItem(currentProductId);
+      break;
+    case 'remove-btn':
+      // 상품 삭제
+      // 현재 클릭된 삭제한다
+      console.log(e.target);
+      cartList.removeCartItem(currentProductId);
+      break;
+    default:
+      return;
   }
 };
+// const saveToLocalStorage = () => {
+//   // 장바구니 데이터를 local
+// };
+
+fetchProductData();
 
 $openCartBtn.addEventListener('click', toggleCart);
 $closeCartBtn.addEventListener('click', toggleCart);
 $backdrop.addEventListener('click', toggleCart);
 $productListGrid.addEventListener('click', addCartItem);
-$cartList.addEventListener('click', removeCartItem);
+$cartList.addEventListener('click', modifyCartItem);
+// $paymentBtn.addEventListener('click');
 // 6. 장바구니 총 가격 합산 기능
 // 장바구니 하단에 현재 장바구니에 담겨있는 상품 가격들의 총 합을 표시해주어야 합니다.
 

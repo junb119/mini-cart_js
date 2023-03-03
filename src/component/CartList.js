@@ -1,3 +1,6 @@
+const MAX_COUNT = 10;
+const MIN_COUNT = 1;
+
 class CartList {
   constructor($target, initialData) {
     this.$target = $target;
@@ -24,12 +27,38 @@ class CartList {
       newState = [...this.state, { ...productData, count: 1 }];
     } else {
       newState = [...this.state];
-      newState[checkedIdx].count += 1;
+      if (newState[checkedIdx].count < 10) {
+        newState[checkedIdx].count += 1;
+      } else {
+        alert(`장바구니에 담을수 있는 최대 수량은 ${MAX_COUNT}개입니다.`);
+      }
     }
 
     this.setState(newState);
     console.log(newState);
   }
+
+  increaseCartItem(id) {
+    const newState = [...this.state];
+    const checkedIdx = this.state.findIndex((item) => item.id === id);
+    if (newState[checkedIdx].count < MAX_COUNT) {
+      newState[checkedIdx].count += 1;
+      this.setState(newState);
+    } else {
+      alert(`장바구니에 담을수 있는 최대 수량은 ${MAX_COUNT}개입니다.`);
+    }
+  }
+  decreaseCartItem(id) {
+    const newState = [...this.state];
+    const checkedIdx = this.state.findIndex((item) => item.id === id);
+    if (newState[checkedIdx].count > MIN_COUNT) {
+      newState[checkedIdx].count -= 1;
+      this.setState(newState);
+    } else {
+      alert(`장바구니에 담을수 있는 최소 수량은 ${MIN_COUNT}개입니다.`);
+    }
+  }
+
   removeCartItem(id) {
     // 장바구니 삭제 기능
     // 자기가 삭제해야하는 아이템
@@ -59,7 +88,9 @@ class CartList {
                 class="flex justify-between text-base font-medium text-gray-900"
               >
                 <h3>${item.name}</h3>
-                <p class="ml-4">${item.price.toLocaleString()}원</p>
+                <p class="ml-4">${
+                  item.price * item.count.toLocaleString()
+                }원</p>
               </div>
             </div>
             <div class="flex flex-1 items-end justify-between">
