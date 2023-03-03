@@ -26,11 +26,20 @@ const $closeCartBtn = document.getElementById('close-cart-btn');
 const $shoppingCart = document.getElementById('shopping-cart');
 const $backdrop = document.getElementById('backdrop');
 const $cartList = document.getElementById('cart-list');
-// const $paymentBtn = document.getElementById('payment-btn');
-let productData = {};
+const $paymentBtn = document.getElementById('payment-btn');
+let productData = [];
 
+// 10. Web Storage API를 사용한 장바구니 데이터 저장 기능
+// 장바구니의 결제하기 버튼을 누르면 장바구니 데이터를 브라우저에 저장합니다.
+// 브라우저에 장바구니 데이터가 저장되어 있는 경우, 장바구니 렌더링 시 해당 데이터를 보여줍니다. (새로고침 해도 장바구니 유지)
+
+const initialCartState = localStorage.getItem('cartState')
+  ? JSON.parse(localStorage.getItem('cartState'))
+  : [];
 const productList = new ProductList($productListGrid, []);
-const cartList = new CartList($cartList, []);
+
+//localStroage를 체크, 값이 있으면 그걸 초기값으로
+const cartList = new CartList($cartList, initialCartState);
 
 // 2. 상품 목록 렌더링하기
 // main 브랜치의 보일러플레이트 코드에는 상품 목록 마크업이 하드코딩 되어 있습니다. (src.index.html)
@@ -95,9 +104,10 @@ const modifyCartItem = (e) => {
       return;
   }
 };
-// const saveToLocalStorage = () => {
-//   // 장바구니 데이터를 local
-// };
+const saveToLocalStorage = () => {
+  // 장바구니 데이터를 localStorage에 저장
+  cartList.saveToLocalStorage();
+};
 
 fetchProductData();
 
@@ -106,24 +116,4 @@ $closeCartBtn.addEventListener('click', toggleCart);
 $backdrop.addEventListener('click', toggleCart);
 $productListGrid.addEventListener('click', addCartItem);
 $cartList.addEventListener('click', modifyCartItem);
-// $paymentBtn.addEventListener('click');
-// 6. 장바구니 총 가격 합산 기능
-// 장바구니 하단에 현재 장바구니에 담겨있는 상품 가격들의 총 합을 표시해주어야 합니다.
-
-// 7. 장바구니 상품 삭제 기능
-// 장바구니 목록에서 삭제하기 글씨를 클릭하면 해당 상품이 삭제됩니다.
-// 변경된 목록에 맞게 장바구니 목록의 총 합계 금액도 변경되어야 합니다.
-
-// 8. 장바구니 상품 중복 추가 방지 기능
-// 상품 목록에서 이미 장바구니에 담겨있는 상품을 클릭했을 때는, 장바구니 내 해당 상품의 수량이 증가해야 합니다.
-
-// 9. 장바구니 상품 수량 수정 기능
-// 장바구니 목록에서 - 버튼을 클릭하면 해당 상품의 수량이 1 감소하고, + 버튼을 누르면 해당 상품의 수량이 1 증가합니다.
-// 변경된 수량에 맞게 장바구니 목록의 합계 금액도 변경되어야 합니다.
-// 최소 수량은 1개, 최대 수량은 10개입니다.
-// 최소 수량에 도달한 경우 - 버튼을 눌러도 수량이 감소하지 않고, "장바구니에 담을 수 있는 최소 수량은 1개입니다." 라는 alert 창을 보여줍니다.
-// 최대 수량에 도달한 경우 + 버튼을 눌러도 수량이 증가하지 않고, "장바구니에 담을 수 있는 최대 수량은 10개입니다." 라는 alert 창을 보여줍니다.
-
-// 10. Web Storage API를 사용한 장바구니 데이터 저장 기능
-// 장바구니의 결제하기 버튼을 누르면 장바구니 데이터를 브라우저에 저장합니다.
-// 브라우저에 장바구니 데이터가 저장되어 있는 경우, 장바구니 렌더링 시 해당 데이터를 보여줍니다. (새로고침 해도 장바구니 유지)
+$paymentBtn.addEventListener('click', saveToLocalStorage);
