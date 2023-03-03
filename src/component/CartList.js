@@ -14,11 +14,24 @@ class CartList {
   }
 
   addCartItem(productData) {
-    const newState = [...this.state, { ...productData, count: 1 }];
+    // 현재 장바구니 데이터에, 지금 추가하려고 하는 아이템이 존재하는지를 파악
+    let newState;
+    const clickedProductId = productData.id;
+    const checkedIdx = this.state.findIndex(
+      (item) => item.id === clickedProductId
+    );
+    if (checkedIdx === -1) {
+      newState = [...this.state, { ...productData, count: 1 }];
+    } else {
+      newState = [...this.state];
+      newState[checkedIdx].count += 1;
+    }
+
     this.setState(newState);
     console.log(newState);
   }
   removeCartItem(id) {
+    // 장바구니 삭제 기능
     // 자기가 삭제해야하는 아이템
     const newState = this.state.filter((item) => item.id !== id);
     this.setState(newState);
