@@ -3,6 +3,7 @@ class CartList {
     this.$target = $target;
     this.$container = document.createElement('ul');
     this.$container.className = 'divide-y divide-gray-200';
+    this.$totalCouont = document.getElementById('total-count');
     this.state = initialData;
     this.$target.append(this.$container);
     this.render();
@@ -19,6 +20,10 @@ class CartList {
   }
 
   render() {
+    this.$totalCouont.innerHTML =
+      this.state
+        .reduce((acc, crr) => crr.price * crr.count + acc, 0)
+        .toLocaleString() + '원'; // 현재 장바구니 가격합 ;
     this.$container.innerHTML = this.state
       .map((item) => {
         return `

@@ -32,6 +32,12 @@ let productData = {};
 const productList = new ProductList($productListGrid, []);
 const cartList = new CartList($cartList, []);
 
+// 2. 상품 목록 렌더링하기
+// main 브랜치의 보일러플레이트 코드에는 상품 목록 마크업이 하드코딩 되어 있습니다. (src.index.html)
+// 하드코딩 되어 있는 마크업 코드를 참고해, 1에서 가져오도록 구현한 더미 데이터를 바탕으로 상품 목록을 렌더링하도록 html 코드를 수정해주세요.
+// 데이터가 없을 때는 "상품이 없습니다" 라는 텍스트를 보여주어야 합니다.
+// 모든 가격은 천 단위의 화폐 표기법에 맞게, 천 단위마다 쉼표를 사용해 렌더링해야 합니다.
+
 const fetchProductData = async () => {
   const result = await getProductData();
   productList.setState(result);
@@ -39,11 +45,23 @@ const fetchProductData = async () => {
 };
 fetchProductData();
 
+// 3. 장바구니 토글 기능
+// 상단 우측의 장바구니 아이콘을 누르면 장바구니가 열려야 합니다.
+// 상품 카드를 클릭하면 장바구니가 열려야 합니다.
+// 장바구니가 열린 상태에서, backdrop(검은 배경)을 누르면 장바구니가 닫혀야 합니다.
+// 장바구니가 열린 상태에서, 장바구니 상단 우측의 X 아이콘을 누르면 장바구니가 닫혀야 합니다.
 const toggleCart = () => {
   $shoppingCart.classList.toggle('translate-x-full');
   $shoppingCart.classList.toggle('translate-x-0');
   $backdrop.hidden = !$backdrop.hidden;
 };
+// 4. 장바구니 렌더링하기
+// main 브랜치의 보일러플레이트 코드에는 장바구니 마크업이 하드코딩 되어 있습니다. (src.index.html)
+// 처음 접속할 경우엔 장바구니가 비어 있어야 하고, 사용자 상호작용에 따라 장바구니 상태를 관리해야 합니다.
+// 하드코딩 되어 있는 마크업 코드를 참고해, 장바구니 데이터를 바탕으로 장바구니 목록을 렌더링하도록 html 코드를 수정해주세요.
+// 5. 장바구니 추가 기능
+// 상품 카드를 클릭하면 해당 상품이 장바구니에 추가되어야 합니다.
+// 장바구니에 보여지는 상품 정보는 아래와 같습니다. (이름, 가격, 수량)
 
 const addCartItem = (e) => {
   // 상품 장바구니에 추가하기
@@ -61,26 +79,6 @@ $openCartBtn.addEventListener('click', toggleCart);
 $closeCartBtn.addEventListener('click', toggleCart);
 $backdrop.addEventListener('click', toggleCart);
 $productListGrid.addEventListener('click', addCartItem);
-
-// 2. 상품 목록 렌더링하기
-// main 브랜치의 보일러플레이트 코드에는 상품 목록 마크업이 하드코딩 되어 있습니다. (src.index.html)
-// 하드코딩 되어 있는 마크업 코드를 참고해, 1에서 가져오도록 구현한 더미 데이터를 바탕으로 상품 목록을 렌더링하도록 html 코드를 수정해주세요.
-// 데이터가 없을 때는 "상품이 없습니다" 라는 텍스트를 보여주어야 합니다.
-// 모든 가격은 천 단위의 화폐 표기법에 맞게, 천 단위마다 쉼표를 사용해 렌더링해야 합니다.
-
-// 3. 장바구니 토글 기능
-// 상단 우측의 장바구니 아이콘을 누르면 장바구니가 열려야 합니다.
-// 상품 카드를 클릭하면 장바구니가 열려야 합니다.
-// 장바구니가 열린 상태에서, backdrop(검은 배경)을 누르면 장바구니가 닫혀야 합니다.
-// 장바구니가 열린 상태에서, 장바구니 상단 우측의 X 아이콘을 누르면 장바구니가 닫혀야 합니다.
-
-// 4. 장바구니 렌더링하기
-// main 브랜치의 보일러플레이트 코드에는 장바구니 마크업이 하드코딩 되어 있습니다. (src.index.html)
-// 처음 접속할 경우엔 장바구니가 비어 있어야 하고, 사용자 상호작용에 따라 장바구니 상태를 관리해야 합니다.
-// 하드코딩 되어 있는 마크업 코드를 참고해, 장바구니 데이터를 바탕으로 장바구니 목록을 렌더링하도록 html 코드를 수정해주세요.
-// 5. 장바구니 추가 기능
-// 상품 카드를 클릭하면 해당 상품이 장바구니에 추가되어야 합니다.
-// 장바구니에 보여지는 상품 정보는 아래와 같습니다. (이름, 가격, 수량)
 
 // 6. 장바구니 총 가격 합산 기능
 // 장바구니 하단에 현재 장바구니에 담겨있는 상품 가격들의 총 합을 표시해주어야 합니다.
