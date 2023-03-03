@@ -7,6 +7,7 @@
 
 import getProductData from './api/getProductData.js';
 import ProductList from './component/ProductList.js';
+import CartList from './component/CartList.js';
 
 // 권장사항 👍
 // API 요청을 위한 함수는 별도의 파일로 분리하는 것을 권장합니다.
@@ -24,12 +25,17 @@ const $openCartBtn = document.getElementById('open-cart-btn');
 const $closeCartBtn = document.getElementById('close-cart-btn');
 const $shoppingCart = document.getElementById('shopping-cart');
 const $backdrop = document.getElementById('backdrop');
+const $cartList = document.getElementById('cart-list');
+
+let productData = {};
 
 const productList = new ProductList($productListGrid, []);
+const cartList = new CartList($cartList, []);
 
 const fetchProductData = async () => {
   const result = await getProductData();
   productList.setState(result);
+  productData = result;
 };
 fetchProductData();
 
@@ -38,10 +44,23 @@ const toggleCart = () => {
   $shoppingCart.classList.toggle('translate-x-0');
   $backdrop.hidden = !$backdrop.hidden;
 };
+
+const addCartItem = (e) => {
+  // 상품 장바구니에 추가하기
+  // 어떤 상품이 추가되었는가?
+  const clickedProduct = productData.find((product) => {
+    return product.id == e.target.dataset.productid;
+  });
+  if (!clickedProduct) return;
+  cartList.addCartItem(clickedProduct);
+
+  toggleCart();
+};
+
 $openCartBtn.addEventListener('click', toggleCart);
 $closeCartBtn.addEventListener('click', toggleCart);
 $backdrop.addEventListener('click', toggleCart);
-$productListGrid.addEventListener('click', toggleCart);
+$productListGrid.addEventListener('click', addCartItem);
 
 // 2. 상품 목록 렌더링하기
 // main 브랜치의 보일러플레이트 코드에는 상품 목록 마크업이 하드코딩 되어 있습니다. (src.index.html)
