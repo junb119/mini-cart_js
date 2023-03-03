@@ -20,12 +20,29 @@ import ProductList from './component/ProductList.js';
 // 이 데이터를 바로 import 해 사용하는 것이 아니라, fetch API를 통해 비동기로 데이터를 받아와 사용하도록 구현해주세요.
 
 const $productListGrid = document.getElementById('product-card-grid');
+const $openCartBtn = document.getElementById('open-cart-btn');
+const $closeCartBtn = document.getElementById('close-cart-btn');
+const $shoppingCart = document.getElementById('shopping-cart');
+const $backdrop = document.getElementById('backdrop');
+
 const productList = new ProductList($productListGrid, []);
+
 const fetchProductData = async () => {
   const result = await getProductData();
   productList.setState(result);
 };
 fetchProductData();
+
+const toggleCart = () => {
+  $shoppingCart.classList.toggle('translate-x-full');
+  $shoppingCart.classList.toggle('translate-x-0');
+  $backdrop.hidden = !$backdrop.hidden;
+};
+$openCartBtn.addEventListener('click', toggleCart);
+$closeCartBtn.addEventListener('click', toggleCart);
+$backdrop.addEventListener('click', toggleCart);
+$productListGrid.addEventListener('click', toggleCart);
+
 // 2. 상품 목록 렌더링하기
 // main 브랜치의 보일러플레이트 코드에는 상품 목록 마크업이 하드코딩 되어 있습니다. (src.index.html)
 // 하드코딩 되어 있는 마크업 코드를 참고해, 1에서 가져오도록 구현한 더미 데이터를 바탕으로 상품 목록을 렌더링하도록 html 코드를 수정해주세요.
